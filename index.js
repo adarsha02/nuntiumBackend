@@ -7,7 +7,9 @@ dotenv.config()
 
 
 //Import Routes
-const authRoute = require('./routes/auth');
+const readerAuth = require('./routes/readerAuth');
+const newsRoute = require('./routes/newsRoute');
+const writerAuth = require('./routes/writerAuth');
 
 
 
@@ -26,6 +28,9 @@ app.use(express.json())
 
 
 //Route Middleware
-app.use('/api', authRoute);
+app.use('/api/reader', readerAuth);
+app.use('/api/news', newsRoute);
+app.use('/api/writer', writerAuth);
+
 
 app.listen(8000, ()=> console.log('Server started'))

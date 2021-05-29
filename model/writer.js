@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const readerSchema = new mongoose.Schema({
+const writerSchema = new mongoose.Schema({
             name: {
                 type: String,
                 required: true,
@@ -12,7 +12,8 @@ const readerSchema = new mongoose.Schema({
                 type: String,
                 required: true,
                 max: 255,
-                min: 6,  
+                min: 6,
+                
 
             },
             password:{
@@ -23,14 +24,14 @@ const readerSchema = new mongoose.Schema({
             },
             phone:{
                 type: String,
-                required: true,
+                required: false,
                 max: 15,
                 min:5,
 
             },
             address:{
                 type: String,
-                required: true,
+                required: false,
                 max: 1000,
                 min: 7,
 
@@ -42,11 +43,12 @@ const readerSchema = new mongoose.Schema({
                 min: 5
 
             },
-            newsChoice:{
-                type: Array,
-                required: false,
+            bio:{
+                type: String,
+                required: true,
+                max: 1000,
             }
 });
 
 
-module.exports = mongoose.model('reader', readerSchema);
+module.exports = mongoose.model('writer', writerSchema);
