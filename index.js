@@ -26,7 +26,6 @@ mongoose.connect(process.env.DB_CONNECT,{
 app.use(express.json())
 //app.use(bodyparser.json())
 
-
 //Route Middleware
 app.use('/api/reader', readerAuth);
 app.use('/api/news', newsRoute);
