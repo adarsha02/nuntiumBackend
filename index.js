@@ -19,8 +19,8 @@ mongoose.connect(process.env.DB_CONNECT,{
     useUnifiedTopology: true, 
     useCreateIndex:true,
     },
-    console.log("Connected to db")
-).catch((err)=>{console.log(err)})
+    console.log('Connected to DB')
+).catch((err)=>{console.log(err.message)})
 
 //Middleware
 app.use(express.json())

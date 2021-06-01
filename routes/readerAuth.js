@@ -46,7 +46,7 @@ router.post('/login', async(req, res) => {
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if(!validPass) return res.status(400).send('Invalid password');
 
-    const userwithID = await reader.findOne({email: req.body.email});
+    const userwithID = await reader.findOne({email: req.body.email}).select('-password');
     res.send(userwithID);
 })
 
