@@ -10,6 +10,7 @@ dotenv.config()
 const readerAuth = require('./routes/readerAuth');
 const newsRoute = require('./routes/newsRoute');
 const writerAuth = require('./routes/writerAuth');
+const liveUpdate = require('./routes/liveupdateRoute');
 
 
 
@@ -31,6 +32,7 @@ app.use(express.json())
 app.use('/api/reader', readerAuth);
 app.use('/api/news', newsRoute);
 app.use('/api/writer', writerAuth);
+app.use('/api/liveupdate', liveUpdate);
 
 
 app.listen(8000, ()=> console.log('Server started'))
