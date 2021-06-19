@@ -42,6 +42,10 @@ const writerSchema = new mongoose.Schema({
     required: true,
     max: 1000,
   },
+  news: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'news'
+  }
 });
 
 module.exports = mongoose.model("writer", writerSchema);

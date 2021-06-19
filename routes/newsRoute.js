@@ -25,6 +25,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
 router.get("/list", async (req, res) => {
   const newsData = await news.find();
   res.send(newsData);
