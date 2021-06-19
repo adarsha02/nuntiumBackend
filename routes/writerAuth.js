@@ -51,7 +51,7 @@ router.post('/login', async(req, res) => {
 
 
 router.post('/details', async (req, res) => {
-    const writerDetails = await writer.findOne({_id: req.body._id}).select('-password').select('-bio');
+    const writerDetails = await writer.findOne({_id: req.body._id}).select('-password');
     if(!writerDetails) return res.status(400).send('No writer Found');
 
     res.send(writerDetails)
