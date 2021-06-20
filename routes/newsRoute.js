@@ -36,6 +36,7 @@ router.get("/list", async (req, res) => {
     await newsData.forEach(async (news) => {
         let hey = {};
         let writerData = await writer.findOne({ _id: news.writer });
+        hey._id=news._id;
         hey.article = news.article;
         hey.headline = news.headline;
         hey.category = news.category;
