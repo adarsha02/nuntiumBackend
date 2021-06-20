@@ -24,7 +24,7 @@ const liveUpdateSchema = new mongoose.Schema(
       required: true,
     },
     keyword: {
-      type: Array,
+      type: String,
       required: false,
     },
     writer: {
