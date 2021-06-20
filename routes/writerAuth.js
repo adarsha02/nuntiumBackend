@@ -23,7 +23,6 @@ router.post('/register', async (req, res) =>{
         address:req.body.address,
         photoPath:req.body.photoPath,
         bio: req.body.bio,
-
     });
     try{
         await writerInfo.save(); 
@@ -56,6 +55,8 @@ router.post('/details', async (req, res) => {
 
     res.send(writerDetails)
 })
+
+
 
 
 module.exports = router;

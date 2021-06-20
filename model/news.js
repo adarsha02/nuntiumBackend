@@ -12,8 +12,6 @@ const newsSchema = new mongoose.Schema({
                 required: true,
                 max: 500,
                 min: 6,
-                
-
             },
             article:{
                 type: String,
@@ -27,7 +25,7 @@ const newsSchema = new mongoose.Schema({
 
             },
             keyword:{
-                type: Array,
+                type: String,
                 required: false,
 
             },
@@ -57,7 +55,7 @@ const newsSchema = new mongoose.Schema({
             },
             writer:{
                 type: String,
-                required: false,
+                required: true,
             }
 
 },

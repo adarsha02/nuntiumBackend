@@ -27,7 +27,7 @@ const writerSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: false,
+    required: true,
     max: 1000,
     min: 7,
   },
@@ -42,10 +42,6 @@ const writerSchema = new mongoose.Schema({
     required: true,
     max: 1000,
   },
-  news: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'news'
-  }
 });
 
 module.exports = mongoose.model("writer", writerSchema);

@@ -3,6 +3,8 @@ const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
+
+
 dotenv.config()
 
 
@@ -25,13 +27,16 @@ mongoose.connect(process.env.DB_CONNECT,{
 
 //Middleware
 app.use(express.json())
-//app.use(bodyparser.json())
 
 //Route Middleware
 app.use('/api/reader', readerAuth);
 app.use('/api/news', newsRoute);
 app.use('/api/writer', writerAuth);
 app.use('/api/liveupdate', liveUpdate);
+
+
+
+
 
 
 app.listen(8000, ()=> console.log('Server started'))
