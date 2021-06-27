@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 
 
@@ -27,6 +28,7 @@ mongoose.connect(process.env.DB_CONNECT,{
 
 //Middleware
 app.use(express.json())
+app.use(cors())
 
 //Route Middleware
 app.use('/api/reader', readerAuth);
@@ -37,6 +39,8 @@ app.use('/api/liveupdate', liveUpdate);
 
 
 
-
+app.get('/',(req,res)=>{
+    res.send("hello nuntium");
+})
 
 app.listen(8000, ()=> console.log('Server started'))
