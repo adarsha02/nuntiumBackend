@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const writer = require('../model/writer');
-const bcrypt = require('bcryptjs')
-
+const bcrypt = require('bcryptjs');
+const cloudinary = require("../middleware/cloudinary");
+const upload = require("../middleware/upload");
 //Register a Writer
 router.post('/register', async (req, res) =>{
     //Validation
@@ -56,7 +57,25 @@ router.post('/details', async (req, res) => {
     res.send(writerDetails)
 })
 
+//Update a Writer
+router.patch("/update/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updates = req.body;
+        const options = { new: true };
 
+        const result = await writer
+            .findByIdAndUpdate(id, updates, options)
+            .select("-password");
+        if (!result) {
+            res.send("Check if writer's id is valid");
+        } else {
+            res.send(result);
+        }
+    } catch (e) {
+        res.send(e.message);
+    }
+});
 
 
 module.exports = router;

@@ -22,15 +22,17 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.get("/list", async (req, res) => {
+
+
+router.get("/list", async (req, res, next) => {
     let returnData = [];
     var counter = 0;
     let liveUpdateData = await liveupdate.find();
-
+    
+try{
     await liveUpdateData.forEach(async (liveupdate) => {
         let hey = {};
         let writerData = await writer.findOne({ _id: liveupdate.writer });
-        console.log(writerData);
         hey._id = liveupdate._id;
         hey.headline = liveupdate.headline;
         hey.subheadline = liveupdate.subheadline;
@@ -48,6 +50,18 @@ router.get("/list", async (req, res) => {
             res.send(returnData);
         }
     });
+}catch(err){
+    next(err)
+}
+
 });
+
+//News that belongs to specific writer
+router.post("/list/writer",async(req, res)=>{
+    console.log(req.body._id)
+ const liveupdate_writer = await liveupdate.find({writer:req.body._id})
+         res.send(liveupdate_writer)
+     
+ });
 
 module.exports = router;

@@ -14,6 +14,8 @@ const readerAuth = require('./routes/readerAuth');
 const newsRoute = require('./routes/newsRoute');
 const writerAuth = require('./routes/writerAuth');
 const liveUpdate = require('./routes/liveupdateRoute');
+const commentR = require('./routes/commentR');
+const discussionR = require('./routes/discussionR');
 
 
 
@@ -35,6 +37,8 @@ app.use('/api/reader', readerAuth);
 app.use('/api/news', newsRoute);
 app.use('/api/writer', writerAuth);
 app.use('/api/liveupdate', liveUpdate);
+app.use('/api/comment',commentR);
+app.use('/api/discussion',discussionR);
 
 
 
@@ -43,4 +47,4 @@ app.get('/',(req,res)=>{
     res.send("hello nuntium");
 })
 
-app.listen(8000, ()=> console.log('Server started'))
+app.listen(8000, ()=> console.log('Server started at 8000'))

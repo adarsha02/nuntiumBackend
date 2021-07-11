@@ -1,32 +1,10 @@
 const router = require("express").Router();
 const news = require("../model/news");
 const writer = require("../model/writer");
-const multer = require("multer");
-//const upload = multer({dest: 'newsPhotos/'});
+const cloudinary = require("../middleware/cloudinary");
+const upload = require("../middleware/upload");
 
-router.post("/register", async (req, res) => {
-    //Validation
 
-    //create new news
-    const newsInfo = news({
-        category: req.body.category,
-        headline: req.body.headline,
-        article: req.body.article,
-        date: req.body.date,
-        keyword: req.body.keyword,
-        photoPath: req.body.photoPath,
-        views: req.body.views,
-        up: req.body.up,
-        down: req.body.down,
-        writer: req.body._id,
-    });
-    try {
-        await newsInfo.save();
-        res.send("News Added");
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-});
 
 router.get("/list", async (req, res) => {
     let returnData = [];
@@ -58,26 +36,48 @@ router.get("/list", async (req, res) => {
     });
 });
 
-const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "newsPhotos/");
-    },
-    filename: function (req, file, callback) {
-        callback(null, file.fieldname + "-" + Date.now() + ".jpg");
-    },
-});
-var upload = multer({ storage: storage });
-router.post("/image", upload.single("file"), (req, res) => {
-    if (!req.file) {
-        console.log("No file recvd");
-        res.send("No file");
-    } else {
-        const host = req.hostname;
-        const filePath = req.protocol + "://" + host + "/" + req.file.path;
-        console.log(filePath);
-        console.log("file recvd");
-        res.send("File recvd");
-    }
-});
 
+router.post("/register", upload.single("newsPhoto"), async (req, res)=>{
+    try{
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'newsPhotos'
+        });
+        //res.json(result.secure_url)
+        const newsInfo = news({
+            category: req.body.category,
+            headline: req.body.headline,
+            article: req.body.article,
+            date: req.body.date,
+            keyword: req.body.keyword,
+            photoPath: result.secure_url,
+            views: req.body.views,
+            up: req.body.up,
+            down: req.body.down,
+            writer: req.body._id,
+        });
+        
+        await newsInfo.save();
+        res.send(newsInfo);
+    }catch(err){
+        res.send(err.message);
+    }
+})
+
+router.post("/news/update", async(req,res)=>{
+
+})
+
+//News that belongs to specific writer
+router.post("/list/writer",async(req, res)=>{
+    try{
+        const news_writer = await news.find({writer:req.body._id})
+                res.send(news_writer)
+    }
+    catch(err){
+        res.status(400).send(err.message)
+    }
+
+     
+ });
+ 
 module.exports = router;
