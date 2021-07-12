@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const comment = require("../model/comment");
 const discussion = require("../model/discussion");
+const reader = require("../model/reader");
 const writer = require("../model/writer");
 
 router.post("/register", async (req, res) => {
@@ -19,12 +20,31 @@ router.post("/register", async (req, res) => {
     }
 });
 
+//list of all comments so specific discussion
 router.post("/list/discussion", async (req, res) => {
     try {
+        let returnData = [];
+        var counter = 0;
+
         let commentData = await comment.find({
             discussion: req.body.discussion,
         });
-        res.send(commentData);
+
+        await commentData.forEach(async (comment) => {
+            let hey = {};
+            let readerData = await reader.findOne({ _id: comment.reader });
+            hey._id = comment._id;
+            hey.discussion = comment.discussion;
+            hey.date = comment.date;
+            hey.reader = comment._id;
+            hey.readerName = readerData.name;
+            hey.readerPhoto = readerData.photoPath;
+            returnData.push(hey);
+            counter++;
+            if (counter == commentData.length) {
+                res.send(returnData);
+            }
+        });
     } catch (err) {
         res.status(400).send(err.message);
     }
@@ -36,7 +56,7 @@ router.post("/list/reader", async (req, res) => {
             discussion: req.body.discussion,
             reader: req.body._id,
         });
-        res.send(commentData)
+        res.send(commentData);
     } catch (err) {
         res.status(400).send(err.message);
     }

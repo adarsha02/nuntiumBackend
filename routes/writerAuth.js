@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const cloudinary = require("../middleware/cloudinary");
 const upload = require("../middleware/upload");
 //Register a Writer
-router.post('/register', async (req, res) =>{
+router.post('/register',upload.single("newsPhoto"), async (req, res) =>{
     //Validation
 
     //Check if user is already in the database
@@ -15,6 +15,11 @@ router.post('/register', async (req, res) =>{
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
+    //uploading the image
+    const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'writerPhotos'
+    });
+
     //create new Writer
     const writerInfo = writer({
         name: req.body.name,
@@ -22,7 +27,7 @@ router.post('/register', async (req, res) =>{
         password:hashedPassword,
         phone:req.body.phone,
         address:req.body.address,
-        photoPath:req.body.photoPath,
+        photoPath:result.secure_url,
         bio: req.body.bio,
     });
     try{

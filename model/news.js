@@ -33,8 +33,7 @@ const newsSchema = new mongoose.Schema({
             photoPath:{
                 type: String,
                 required: true,
-                max:3000,
-                min: 5
+                default: "https://res.cloudinary.com/adarsha02/image/upload/v1626092858/old-newspaper-350376_1920_cs8hbu.jpg",
 
             },
             views:{
