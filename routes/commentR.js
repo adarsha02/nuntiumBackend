@@ -35,6 +35,7 @@ router.post("/list/discussion", async (req, res) => {
             let readerData = await reader.findOne({ _id: comment.reader });
             hey._id = comment._id;
             hey.discussion = comment.discussion;
+            hey.comment = comment.comment;
             hey.date = comment.date;
             hey.reader = comment._id;
             hey.readerName = readerData.name;
@@ -49,6 +50,7 @@ router.post("/list/discussion", async (req, res) => {
         res.status(400).send(err.message);
     }
 });
+
 
 router.post("/list/reader", async (req, res) => {
     try {

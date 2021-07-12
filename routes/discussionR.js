@@ -56,9 +56,7 @@ router.post("/list/writer",async(req, res)=>{
         res.send(discussion_writer)
     }catch(err){
         res.status(400).send(err.message)
-    }
- 
-     
+    }     
  });
 
  module.exports = router;
