@@ -64,4 +64,19 @@ router.post("/list/writer",async(req, res)=>{
      
  });
 
+ //Update a liveupdate
+router.patch("/update/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updates = req.body;
+        const options = { new: true };
+
+        const result = await liveupdate
+            .findByIdAndUpdate(id, updates, options)
+            res.send(result);    
+    } catch (e) {
+        res.status(400).send(e.message);
+    }
+});
+
 module.exports = router;

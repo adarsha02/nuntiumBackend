@@ -30,4 +30,16 @@ router.post("/list/discussion", async (req, res) => {
     }
 });
 
+router.post("/list/reader", async (req, res) => {
+    try {
+        let commentData = await comment.find({
+            discussion: req.body.discussion,
+            reader: req.body._id,
+        });
+        res.send(commentData)
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
+
 module.exports = router;
