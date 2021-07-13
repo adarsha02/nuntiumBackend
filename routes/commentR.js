@@ -37,7 +37,7 @@ router.post("/list/discussion", async (req, res) => {
             hey.discussion = comment.discussion;
             hey.comment = comment.comment;
             hey.date = comment.date;
-            hey.reader = comment._id;
+            hey.reader = comment.reader;
             hey.readerName = readerData.name;
             hey.readerPhoto = readerData.photoPath;
             returnData.push(hey);
