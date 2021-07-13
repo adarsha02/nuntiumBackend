@@ -51,6 +51,22 @@ router.post("/list/discussion", async (req, res) => {
     }
 });
 
+//deleting a comment
+
+router.delete("/delete/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const delRes = await comment.findByIdAndDelete(id);
+        if (delRes) {
+            res.send(delRes);
+        } else {
+            res.send("Please check if comment exist");
+        }
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
+
 
 router.post("/list/reader", async (req, res) => {
     try {

@@ -74,4 +74,21 @@ router.patch("/update/:id", async (req, res) => {
     }
 });
 
+//deleting a liveupdate
+
+router.delete("/delete/:id",async (req, res) => {
+    try{
+        const id = req.params.id;
+        const delRes = await liveupdate.findByIdAndDelete(id);
+        if(delRes){
+            res.send(delRes)
+        }else{
+            res.send("Please check if liveupdate exist");
+        }
+        
+    }catch(err){
+        res.status(400).send(err.message)
+    }
+})
+
 module.exports = router;
