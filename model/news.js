@@ -27,8 +27,7 @@ const newsSchema = new mongoose.Schema({
             },
             keyword:{
                 type: String,
-                required: false,
-
+                required: true,
             },
             photoPath:{
                 type: String,

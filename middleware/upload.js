@@ -8,13 +8,6 @@ const imageFilter = (req, file, cb) => {
     }
 };
 
-const audioFilter = (req, file, cb) => {
-    if (file.mimetype === "audion/mp3") {
-        cb(null, true);
-    } else {
-        cb(new Error("please upload only audio files"), false);
-    }
-};
 
 
 const storage = multer.diskStorage({});
@@ -27,10 +20,6 @@ var upload = multer({
 });
 
 
-var audioUpload = multer({
-    storage: storage,
-    fileFilter: audioFilter
-})
 
 
-module.exports = upload, audioUpload;
+module.exports = upload;

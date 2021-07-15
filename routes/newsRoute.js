@@ -36,11 +36,13 @@ router.get("/list", async (req, res) => {
 
 router.post("/register", upload.single("newsPhoto"), async (req, res) => {
     try {
+        //console.log(JSON.parse(JSON.stringify(req.body)))
         if (
             req.body.category &&
             req.body.article &&
             req.body._id &&
-            req.body.headline
+            req.body.headline && 
+            req.body.keyword
         ) {
             const result = await cloudinary.uploader.upload(req.file.path, {
                 folder: "newsPhotos",

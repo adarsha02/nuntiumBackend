@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const discussion = require("../model/discussion");
 const writer = require("../model/writer");
+const comment = require("../model/comment");
 
 
 router.post('/register',async (req,res)=>{
@@ -58,5 +59,41 @@ router.post("/list/writer",async(req, res)=>{
         res.status(400).send(err.message)
     }     
  });
+
+//Update a discussion
+router.patch("/update/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updates = req.body;
+        const options = { new: true };
+
+        const result = await discussion.findByIdAndUpdate(id, updates, options);
+        res.send(result);
+    } catch (e) {
+        res.status(400).send(e.message);
+    }
+});
+
+
+ //deleting a discussion and along with its all comments
+
+router.delete("/delete/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const commentData = await comment.find({ discussion: id });
+        const delRes = await discussion.findByIdAndDelete(id);
+
+        if (delRes) {
+            await commentData.forEach(async (comments) => {
+                await comment.findByIdAndDelete(comments._id)
+            });
+            res.send(delRes);
+        } else {
+            res.send("Please check if discussion exists");
+        }
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
 
  module.exports = router;
