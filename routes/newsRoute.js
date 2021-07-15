@@ -34,6 +34,16 @@ router.get("/list", async (req, res) => {
     });
 });
 
+router.get("/list/latest", async (req, res) => {
+    const date = new Date();
+const maxNumOfNews = 25;
+    const latestNews = await news
+        .find({ date: { $lte: Date.now() } })
+        .sort({ date: "desc" })
+        .limit(maxNumOfNews);
+        res.send(latestNews);
+});
+
 router.post("/register", upload.single("newsPhoto"), async (req, res) => {
     try {
         //console.log(JSON.parse(JSON.stringify(req.body)))
@@ -41,7 +51,7 @@ router.post("/register", upload.single("newsPhoto"), async (req, res) => {
             req.body.category &&
             req.body.article &&
             req.body._id &&
-            req.body.headline && 
+            req.body.headline &&
             req.body.keyword
         ) {
             const result = await cloudinary.uploader.upload(req.file.path, {

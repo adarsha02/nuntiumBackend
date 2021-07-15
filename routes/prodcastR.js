@@ -37,30 +37,32 @@ router.get("/list", async (req, res) => {
         let returnData = [];
         var counter = 0;
         let podcastData = await podcast.find();
-
-        await podcastData.forEach(async (podcast) => {
-            let hey = {};
-            let writerData = await writer.findOne({ _id: podcast.writer });
-            hey._id = podcast._id;
-            hey.name = podcast.name;
-            hey.description = podcast.description;
-            hey.photoPath = podcast.photoPath;
-            hey.date = podcast.date;
-            hey.writerName = writerData.name;
-            hey.writerPhoto = writerData.photoPath;
-            hey.writerBio = writerData.bio;
-            hey.writer = writerData._id;
-            returnData.push(hey);
-            counter++;
-            if (counter == podcastData.length) {
-                res.send(returnData);
-            }
-        });
+        if (podcastData) {
+            await podcastData.forEach(async (podcast) => {
+                let hey = {};
+                let writerData = await writer.findOne({ _id: podcast.writer });
+                hey._id = podcast._id;
+                hey.name = podcast.name;
+                hey.description = podcast.description;
+                hey.photoPath = podcast.photoPath;
+                hey.date = podcast.date;
+                hey.writerName = writerData.name;
+                hey.writerPhoto = writerData.photoPath;
+                hey.writerBio = writerData.bio;
+                hey.writer = writerData._id;
+                returnData.push(hey);
+                counter++;
+                if (counter == podcastData.length) {
+                    res.send(returnData);
+                }
+            });
+        } else {
+            res.send("No podcast found in Database");
+        }
     } catch (err) {
         res.status(400).send(err.message);
     }
 });
-
 
 //Update a podcast
 router.patch("/update/:id", async (req, res) => {
@@ -76,7 +78,6 @@ router.patch("/update/:id", async (req, res) => {
     }
 });
 
-
 //deleting a podcast and along with its all episodes
 
 router.delete("/delete/:id", async (req, res) => {
@@ -87,7 +88,7 @@ router.delete("/delete/:id", async (req, res) => {
 
         if (delRes) {
             await episodeData.forEach(async (episodes) => {
-                await episode.findByIdAndDelete(episodes._id)
+                await episode.findByIdAndDelete(episodes._id);
             });
             res.send(delRes);
         } else {

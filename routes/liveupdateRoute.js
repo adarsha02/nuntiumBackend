@@ -53,6 +53,16 @@ router.get("/list", async (req, res, next) => {
     }
 });
 
+router.get("/list/latest", async (req, res) => {
+    const date = new Date();
+    const maxNumOfNews = 15;
+    const latestLiveUpdate = await liveupdate
+        .find({ date: { $lte: Date.now() } })
+        .sort({ date: "desc" })
+        .limit(maxNumOfNews);
+    console.log(latestLiveUpdate);
+});
+
 //News that belongs to specific writer
 router.post("/list/writer", async (req, res) => {
     console.log(req.body._id);
@@ -76,19 +86,18 @@ router.patch("/update/:id", async (req, res) => {
 
 //deleting a liveupdate
 
-router.delete("/delete/:id",async (req, res) => {
-    try{
+router.delete("/delete/:id", async (req, res) => {
+    try {
         const id = req.params.id;
         const delRes = await liveupdate.findByIdAndDelete(id);
-        if(delRes){
-            res.send(delRes)
-        }else{
+        if (delRes) {
+            res.send(delRes);
+        } else {
             res.send("Please check if liveupdate exist");
         }
-        
-    }catch(err){
-        res.status(400).send(err.message)
+    } catch (err) {
+        res.status(400).send(err.message);
     }
-})
+});
 
 module.exports = router;
