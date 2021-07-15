@@ -82,8 +82,8 @@ router.patch("/update/:id", async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
     try {
         const id = req.params.id;
-        const episodeData = await episode.find({ podcast: id });
         const delRes = await podcast.findByIdAndDelete(id);
+        const episodeData = await episode.find({ podcast: id });
 
         if (delRes) {
             await episodeData.forEach(async (episodes) => {
@@ -91,7 +91,7 @@ router.delete("/delete/:id", async (req, res) => {
             });
             res.send(delRes);
         } else {
-            res.send("Please check if episode exist");
+            res.send("Please check if podcast exist");
         }
     } catch (err) {
         res.status(400).send(err.message);

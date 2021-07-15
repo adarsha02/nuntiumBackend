@@ -18,9 +18,9 @@ router.post(
                 req.body.guest
             ) {
                 const result = await cloudinary.uploader.upload(req.file.path, {
+                    resource_type: "auto",
                     folder: "podcasts",
                 });
-                console.log(result);
                 const episodeInfo = episode({
                     podcast: req.body.podcast,
                     name: req.body.name,
@@ -82,23 +82,20 @@ router.post("/list/podcast", async (req, res) => {
     }
 });
 
-
-
-
 //deleting a episode
 
-router.delete("/delete/:id",async (req, res) => {
-    try{
+router.delete("/delete/:id", async (req, res) => {
+    try {
         const id = req.params.id;
         const delRes = await episode.findByIdAndDelete(id);
-        if(delRes){
-            res.send(delRes)
-        }else{
+        if (delRes) {
+            res.send(delRes);
+        } else {
             res.send("Please check if episode exist");
         }
-        
-    }catch(err){
-        res.status(400).send(err.message)
+    } catch (err) {
+        res.status(400).send(err.message);
     }
-})
+});
+
 module.exports = router;
