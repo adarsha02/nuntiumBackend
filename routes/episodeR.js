@@ -55,7 +55,8 @@ router.post("/list/podcast", async (req, res) => {
         await episodeData.forEach(async (episode) => {
             let hey = {};
 
-            let writerData = await writer.findOne({ _id: episode.writer });
+            let writerData = await writer.findOne({ writer: episode.writer });
+            console.log(writerData)
 
             hey._id = episode._id;
             hey.name = episode.name;
