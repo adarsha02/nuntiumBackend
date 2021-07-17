@@ -99,4 +99,14 @@ router.delete("/delete/:id", async (req, res) => {
     }
 });
 
+
+//podcast that belongs to specific writer
+router.post("/list/writer", async (req, res) => {
+    try {
+        const podcast_writer = await podcast.find({ writer: req.body._id });
+        res.send(podcast_writer);
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
 module.exports = router;

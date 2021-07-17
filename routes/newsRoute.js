@@ -82,7 +82,7 @@ router.post("/register", upload.single("newsPhoto"), async (req, res) => {
     }
 });
 
-router.patch("/news/update/:id", async (req, res) => {
+router.patch("/update/:id", async (req, res) => {
     try {
         const id = req.params.id;
         const updates = req.body;
@@ -95,7 +95,7 @@ router.patch("/news/update/:id", async (req, res) => {
     }
 });
 
-router.delete("/news/delete/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     try {
         const id = req.params.id;
         const bookmarkData = await bookmark.find({ news: id });
