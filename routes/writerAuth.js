@@ -4,14 +4,14 @@ const bcrypt = require("bcryptjs");
 const cloudinary = require("../middleware/cloudinary");
 const upload = require("../middleware/upload");
 //Register a Writer
-router.post("/register", upload.single("newsPhoto"), async (req, res) => {
+router.post("/register", upload.single("writerPhoto"), async (req, res) => {
     //Validation
     if (
         req.body.name &&
         req.body.email &&
         req.body.password &&
         req.body.address &&
-        req.body.bio
+        req.body.bio 
     ) {
         //Check if user is already in the database
         const emailExist = await writer.findOne({ email: req.body.email });
