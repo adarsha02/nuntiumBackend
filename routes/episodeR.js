@@ -13,7 +13,6 @@ router.post(
             if (
                 req.body.podcast &&
                 req.body.name &&
-                req.body._id &&
                 req.body.description &&
                 req.body.guest
             ) {
@@ -28,7 +27,6 @@ router.post(
                     date: req.body.date,
                     audioPath: result.secure_url,
                     guest: req.body.guest,
-                    writer: req.body._id,
                 });
 
                 await episodeInfo.save();
@@ -55,8 +53,6 @@ router.post("/list/podcast", async (req, res) => {
         await episodeData.forEach(async (episode) => {
             let hey = {};
 
-            let writerData = await writer.findOne({ writer: episode.writer });
-            console.log(writerData)
 
             hey._id = episode._id;
             hey.name = episode.name;
@@ -65,12 +61,6 @@ router.post("/list/podcast", async (req, res) => {
             hey.audioPath = episode.audioPath;
             hey.guest = episode.guest;
             hey.podcast = episode.podcast;
-            hey.writer = episode.writer;
-
-            hey.writerName = writerData.name;
-            hey.writerPhoto = writerData.photoPath;
-            hey.writerBio = writerData.bio;
-
             returnData.push(hey);
             counter++;
 

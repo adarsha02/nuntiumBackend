@@ -26,8 +26,8 @@ const episodeSchema = new mongoose.Schema({
     },
     guest: {
         type: String,
-        required: false,
-    }
+        required: true,
+    },
 });
 
 module.exports = mongoose.model("episode", episodeSchema);
