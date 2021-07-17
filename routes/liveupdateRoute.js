@@ -54,13 +54,40 @@ router.get("/list", async (req, res, next) => {
 });
 
 router.get("/list/latest", async (req, res) => {
+    let returnData = [];
+    var counter = 0;
     const date = new Date();
     const maxNumOfNews = 15;
-    const latestLiveUpdate = await liveupdate
+    try{
+        const latestLiveUpdate = await liveupdate
         .find({ date: { $lte: Date.now() } })
         .sort({ date: "desc" })
         .limit(maxNumOfNews);
-    console.log(latestLiveUpdate);
+        await latestLiveUpdate.forEach(async (liveupdate) => {
+            let hey = {};
+            let writerData = await writer.findOne({ _id: liveupdate.writer });
+            hey._id = liveupdate._id;
+            hey.headline = liveupdate.headline;
+            hey.subheadline = liveupdate.subheadline;
+            hey.category = liveupdate.category;
+            hey.date = liveupdate.date;
+            hey.keyword = liveupdate.keyword;
+            hey.writer = liveupdate.writer;
+            hey.writerName = writerData.name;
+            hey.writerPhoto = writerData.photoPath;
+            hey.writerBio = writerData.bio;
+            hey.writer = writerData._id;
+            returnData.push(hey);
+            counter++;
+            if (counter == latestLiveUpdate.length) {
+                res.send(returnData);
+            }
+        });
+
+    }catch(err){
+        res.status(400).send(err.message)
+    }
+
 });
 
 //News that belongs to specific writer

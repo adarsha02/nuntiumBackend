@@ -42,10 +42,12 @@ router.post("/register", upload.single("newsPhoto"), async (req, res) => {
         } catch (error) {
             res.status(400).send(error.message);
         }
-    }else{
-        res.send("Please enter all the required fields")
+    } else {
+        res.send("Please enter all the required fields");
     }
 });
+
+
 
 //Login a writer
 router.post("/login", async (req, res) => {
@@ -63,6 +65,16 @@ router.post("/login", async (req, res) => {
         .select("-password");
     res.send(userwithID);
 });
+
+router.get("/list", async (req, res) => {
+    try{
+        const allWriter = await writer.find().select("-password")
+        res.send(allWriter)
+    }catch(err){
+        res.status(400).send(err.message)
+    }
+    
+})
 
 router.post("/details", async (req, res) => {
     const writerDetails = await writer
@@ -92,7 +104,6 @@ router.patch("/update/:id", async (req, res) => {
         res.send(e.message);
     }
 });
-
 
 router.post("/password", async (req, res) => {
     try {

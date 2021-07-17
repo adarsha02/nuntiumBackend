@@ -36,13 +36,39 @@ router.get("/list", async (req, res) => {
 });
 
 router.get("/list/latest", async (req, res) => {
+    let returnData = [];
+    var counter = 0;
     const date = new Date();
     const maxNumOfNews = 25;
+    try{
     const latestNews = await news
         .find({ date: { $lte: Date.now() } })
         .sort({ date: "desc" })
         .limit(maxNumOfNews);
-    res.send(latestNews);
+
+    await latestNews.forEach(async (news) => {
+        let hey = {};
+        let writerData = await writer.findOne({ _id: news.writer });
+        hey._id = news._id;
+        hey.article = news.article;
+        hey.headline = news.headline;
+        hey.category = news.category;
+        hey.date = news.date;
+        hey.photoPath = news.photoPath;
+        hey.keyword = news.keyword;
+        hey.writerName = writerData.name;
+        hey.writerPhoto = writerData.photoPath;
+        hey.writerBio = writerData.bio;
+        hey.writer = writerData._id;
+        returnData.push(hey);
+        counter++;
+        if (counter == latestNews.length) {
+            res.send(returnData);
+        }
+    });
+}catch(err){
+    res.status(400).send(err.message)
+}
 });
 
 router.post("/register", upload.single("newsPhoto"), async (req, res) => {
