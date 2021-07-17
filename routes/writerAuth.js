@@ -93,4 +93,36 @@ router.patch("/update/:id", async (req, res) => {
     }
 });
 
+
+router.post("/password", async (req, res) => {
+    try {
+        const userID = req.body._id;
+        const password = req.body.password;
+        const newpass = req.body.newPassword;
+        const options = { new: true };
+
+        const user = await writer.findOne({ _id: userID });
+        // current Password check
+        const validPass = await bcrypt.compare(password, user.password);
+        if (!validPass)
+            return res
+                .status(400)
+                .send("Please enter correct current password");
+
+        //Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newpass, salt);
+
+        const result = await writer.findByIdAndUpdate(
+            userID,
+            { password: hashedPassword },
+            options
+        );
+        if (!result) return res.send("Cannot update password");
+        res.send("password changed successfully");
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
+
 module.exports = router;

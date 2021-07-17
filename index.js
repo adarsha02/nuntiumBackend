@@ -15,6 +15,7 @@ const commentR = require("./routes/commentR");
 const discussionR = require("./routes/discussionR");
 const podcastR = require("./routes/prodcastR");
 const episodeR = require("./routes/episodeR");
+const bookmarkR = require("./routes/bookmarkR");
 
 //DB connection
 mongoose
@@ -44,6 +45,7 @@ app.use("/api/comment", commentR);
 app.use("/api/discussion", discussionR);
 app.use("/api/podcast", podcastR);
 app.use("/api/episode", episodeR);
+app.use("/api/bookmark", bookmarkR);
 
 app.get("/", (req, res) => {
     res.send("hello nuntium");

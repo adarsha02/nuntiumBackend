@@ -3,6 +3,7 @@ const news = require("../model/news");
 const writer = require("../model/writer");
 const cloudinary = require("../middleware/cloudinary");
 const upload = require("../middleware/upload");
+const bookmark = require("../model/bookmark");
 
 router.get("/list", async (req, res) => {
     let returnData = [];
@@ -36,12 +37,12 @@ router.get("/list", async (req, res) => {
 
 router.get("/list/latest", async (req, res) => {
     const date = new Date();
-const maxNumOfNews = 25;
+    const maxNumOfNews = 25;
     const latestNews = await news
         .find({ date: { $lte: Date.now() } })
         .sort({ date: "desc" })
         .limit(maxNumOfNews);
-        res.send(latestNews);
+    res.send(latestNews);
 });
 
 router.post("/register", upload.single("newsPhoto"), async (req, res) => {
@@ -81,7 +82,37 @@ router.post("/register", upload.single("newsPhoto"), async (req, res) => {
     }
 });
 
-router.patch("/news/update/:id", async (req, res) => {});
+router.patch("/news/update/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updates = req.body;
+        const options = { new: true };
+
+        const result = await news.findByIdAndUpdate(id, updates, options);
+        res.send(result);
+    } catch (e) {
+        res.status(400).send(e.message);
+    }
+});
+
+router.delete("/news/delete/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const bookmarkData = await bookmark.find({ news: id });
+        const delRes = await news.findByIdAndDelete(id);
+
+        if (delRes) {
+            await bookmarkData.forEach(async (bookmark) => {
+                await bookmark.findByIdAndDelete(bookmark._id);
+            });
+            res.send(delRes);
+        } else {
+            res.send("Please check if news exist");
+        }
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
 
 //News that belongs to specific writer
 router.post("/list/writer", async (req, res) => {
