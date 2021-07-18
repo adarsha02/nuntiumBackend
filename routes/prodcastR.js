@@ -8,7 +8,9 @@ const episode = require("../model/episode");
 router.post("/register", upload.single("podcastPhoto"), async (req, res) => {
     //Validation
 
-    if (req.body.name && req.body.description && req.body._id) {
+    if(!req.file) return res.send("Please add image file")
+
+    if (req.body.name && req.body.description && req.body._id ) {
         const result = await cloudinary.uploader.upload(req.file.path, {
             folder: "podcastPhotos",
         });
